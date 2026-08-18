@@ -16,13 +16,23 @@ o que restringe as opções de hospedagem e serviços gerenciados.
 ## Decisão
 
 **Stack**
-- Next.js 15 (App Router), self-hosted.
+- Next.js 15 (App Router), output standalone — portabilidade garantida.
 - Tailwind CSS v4 + shadcn/ui.
 - Postgres como banco de dados principal.
-- Deploy via GitHub Actions em VPS.
+- Deploy via Vercel Hobby enquanto custo = US$ 0 (diretriz do investidor — Decision Log v16).
 - Storage de arquivos: Cloudflare R2.
 - Autenticação: solução open-source (Auth.js/better-auth).
 - Vídeos: embeds do Vimeo da escola — a plataforma nunca hospeda mídia própria.
+
+**Gatilho de saída — Vercel → VPS**
+- Condição de saída (qualquer uma basta): Vercel solicitar upgrade para plano pago OU custo
+  projetado ultrapassar US$ 10/mês. Nesse evento, Mateus (CFO) escala ao CEO para autorização
+  de migração para VPS (Hetzner CX21 ou similar, ~US$ 5-8/mês).
+
+**Lei de portabilidade**
+- `output: 'standalone'` obrigatório no `next.config`. Nenhuma API exclusiva da Vercel
+  (Edge Functions, KV, Blob, ISR via Vercel CDN) pode ser usada. Qualquer feature que exija
+  API Vercel-exclusiva é considerada desvio desta ADR e deve ser bloqueada em code review.
 
 **White-label**
 - Toda cor de interface é consumida exclusivamente via tokens de design.
@@ -35,8 +45,11 @@ o que restringe as opções de hospedagem e serviços gerenciados.
   primário de desenvolvimento (EN-first).
 
 **CI/CD**
-- Pipeline via GitHub Actions, com deploy automatizado para o VPS que hospeda
-  o MVP.
+- GitHub Actions: lint, typecheck e testes (qualidade de código). O deploy
+  não é responsabilidade do Actions — é automático via integração Vercel + GitHub
+  (commit em `main` → Vercel deploya; PR aberto → Vercel gera preview de PR).
+- GitHub Actions NÃO faz deploy; qualquer step de `vercel deploy` no Actions é
+  desvio desta ADR.
 
 ## Consequências
 
@@ -47,4 +60,10 @@ o que restringe as opções de hospedagem e serviços gerenciados.
   fora do sistema de tokens, é considerada desvio desta ADR.
 - Escolhas de serviços gerenciados (storage, auth, deploy) ficam restritas ao
   teto de US$ 15/mês de infraestrutura do MVP.
-- Mudanças em qualquer um destes pontos exigem uma nova ADR que supersede esta.
+- O build DEVE ser sempre portável: `pnpm next build` produz pasta `.next/standalone`
+  funcional em qualquer ambiente Node.js 20 sem dependência de runtime Vercel.
+  Falha nesse critério é bloqueante de merge.
+- Ao atingir o gatilho de saída (plano pago ou custo > US$ 10/mês projetado),
+  a migração para VPS não exige nova ADR — apenas execução do plano de infra
+  (épico ST-14x). Esta ADR permanece válida com a seção de deploy atualizada.
+- Mudanças em qualquer um dos demais pontos exigem uma nova ADR que supersede esta.
