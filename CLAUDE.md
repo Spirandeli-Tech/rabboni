@@ -15,7 +15,7 @@ O trabalho aqui é executado por agentes via runner, sem humano na conversa:
 
 ## Decisões que valem aqui (não rediscutir em execução)
 - Stack: Next.js 15 (App Router) self-hosted · Tailwind CSS v4 + shadcn/ui ·
-  Postgres. Deploy via GitHub Actions em VPS. Teto de infra MVP: US$ 15/mês.
+  Postgres. Deploy: Vercel Hobby enquanto custo = $0 (gatilho de saída: plano pago ou custo projetado > US$10/mês → VPS). CI (lint/typecheck/testes) no GitHub Actions. Teto de infra MVP: US$ 15/mês. LEI DE PORTABILIDADE: build standalone, nenhuma API exclusiva da Vercel.
 - Storage de arquivos: Cloudflare R2. Auth: open-source (Auth.js/better-auth).
   Vídeos: embeds do Vimeo da escola (nunca hospedar mídia).
 - Design: tokens da spec "Design & Identidade Visual v1.0" (Confluence) são lei.
