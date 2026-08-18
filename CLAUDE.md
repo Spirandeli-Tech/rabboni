@@ -21,6 +21,15 @@ O trabalho aqui é executado por agentes via runner, sem humano na conversa:
 - Design: tokens da spec "Design & Identidade Visual v1.0" (Confluence) são lei.
   Cor SÓ via tokens (white-label). i18n EN/PT em toda string de interface.
 
+## Scaffolding e dependências (LEI)
+- Projeto/estruturas novas SEMPRE via CLI oficial: `pnpm create next-app`,
+  `pnpm dlx shadcn@latest init/add`, `pnpm add <pkg>`. NUNCA escrever
+  package.json, lockfiles ou boilerplate de framework à mão — lockfile só
+  existe como resultado de install real.
+- Depois do scaffold, customize o gerado; não o contrário.
+- Antes de abrir PR: `pnpm build` LOCAL tem que passar — PR que não builda
+  não nasce (check da Vercel é pré-condição de merge).
+
 ## Convenções
 - Branch por ticket: `st-NNN-descricao-curta`. Commits em inglês, imperativos.
 - PR into `main`, título `[ST-NNN] <entrega>`, corpo com o que foi feito e as
